@@ -1,0 +1,43 @@
+{
+  "name": "frontend-project-lvl3",
+  "version": "0.0.1",
+  "description": "RSS agregator",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbalyura/frontend-project-lvl3.git"
+  },
+  "keywords": [
+    "rss",
+    "rss-reader",
+    "rss-agregator"
+  ],
+  "author": "mbalyura <mbalyura@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mbalyura/frontend-project-lvl3/issues"
+  },
+  "homepage": "https://github.com/mbalyura/frontend-project-lvl3#readme",
+  "devDependencies": {
+    "@babel/core": "^7.8.6",
+    "@babel/preset-env": "^7.8.6",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.0.6",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.16.1"
+  }
+}
