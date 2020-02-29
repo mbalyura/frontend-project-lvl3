@@ -1,9 +1,10 @@
 install:
 	npm install
 build:
-	rm -rf dist
 	npx webpack
 dev:
-	npx webpack-dev-server
+	npx webpack-dev-server --open
 lint:
 	npx eslint .
+stats:
+	npx webpack --json > stats.json && webpack-bundle-analyzer stats.json
