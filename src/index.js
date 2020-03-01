@@ -4,7 +4,7 @@ import { string } from 'yup';
 import watch from './watchers';
 
 const state = {
-  feeds: [],
+  feedUrls: [],
   urlInputValidity: true,
 };
 
@@ -16,7 +16,7 @@ const urlValidate = string().url();
 
 urlInput.addEventListener('input', (e) => {
   const { value } = e.target;
-  const isDouble = state.feeds.includes(value);
+  const isDouble = state.feedUrls.includes(value);
   urlValidate.isValid(value).then((validity) => {
     state.urlInputValidity = validity && !isDouble;
   });
@@ -25,6 +25,6 @@ urlInput.addEventListener('input', (e) => {
 addRssButton.addEventListener('click', (e) => {
   e.preventDefault();
   if (state.urlInputValidity) {
-    state.feeds.push(urlInput.value);
+    state.feedUrls.push(urlInput.value);
   }
 });

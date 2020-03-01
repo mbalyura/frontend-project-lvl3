@@ -1,9 +1,11 @@
 import { watch } from 'melanke-watchjs';
 import axios from 'axios';
+import parser from './parser/parser';
+import render from './render';
 
 const urlInput = document.querySelector('.url-input');
 const addRssButton = document.querySelector('.rss-add');
-const divResponse = document.querySelector('.response');
+const outputContainer = document.querySelector('.output');
 
 export default (state) => {
   watch(state, 'urlInputValidity', () => {
@@ -16,19 +18,16 @@ export default (state) => {
     }
   });
 
-  watch(state, 'feeds', () => {
-    // urlInput.value = '';
+  watch(state, 'feedUrls', () => {
+    // urlInput.value = ''; // clear input
+    outputContainer.innerHTML = '';
+    const corsUrl = 'https://cors-anywhere.herokuapp.com/';
 
-    const cors = 'https://cors-anywhere.herokuapp.com/';
-    const domParser = new DOMParser();
-
-    state.feeds.map((feed) => {
-      axios.get(`${cors}${feed}`)
+    state.feedUrls.forEach((feedUrl) => {
+      axios.get(`${corsUrl}${feedUrl}`)
         .then((response) => {
-          // console.log('response: ', response);
-          const parsedResponse = domParser.parseFromString(response.data, 'text/xml');
-          console.log('parsedResponse: ', parsedResponse);
-          divResponse.innerHTML = parsedResponse.all[0].textContent;
+          const parsedFeed = parser(response.data);
+          render(parsedFeed);
         })
         .catch((error) => {
           console.log('error: ', error);
