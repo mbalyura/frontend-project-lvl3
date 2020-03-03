@@ -1,0 +1,25 @@
+body {
+  background-color: aliceblue;
+}
+
+.jumbotron {
+  /* background-color: rgb(149, 127, 0); */
+}
+
+.output {
+  background-color: rgb(212, 199, 194);
+  border-radius: 0.3rem;
+  /* padding: 15px; */
+}
+
+h4 {
+  color: red;
+}
+
+h5 {
+  color: green;
+}
+
+p {
+  margin-bottom: 0;
+}

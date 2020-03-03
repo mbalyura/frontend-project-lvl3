@@ -6,7 +6,10 @@
   "scripts": {
     "test": "jest",
     "build": "npx webpack",
-    "watch": "npx webpack --watch"
+    "watch": "npx webpack --watch",
+    "dev": "npx webpack-dev-server --open",
+    "stats": "npx webpack --json > stats.json && webpack-bundle-analyzer stats.json",
+    "deploy": "surge dist rss-aggregator.surge.sh"
   },
   "repository": {
     "type": "git",
@@ -46,6 +49,7 @@
     "@babel/polyfill": "^7.8.3",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
+    "i18next": "^19.3.2",
     "jquery": "^3.4.1",
     "lodash": "^4.17.15",
     "melanke-watchjs": "^1.5.2",
