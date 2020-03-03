@@ -1,15 +1,11 @@
 body {
-  background-color: aliceblue;
+  background-color: rgb(255, 246, 214);
 }
 
-.jumbotron {
-  /* background-color: rgb(149, 127, 0); */
-}
-
-.output {
-  background-color: rgb(212, 199, 194);
-  border-radius: 0.3rem;
-  /* padding: 15px; */
+.output, .input {
+  background-color: linen;
+  /* border-radius: 0.3rem; */
+  padding: 15px;
 }
 
 h4 {
