@@ -8,20 +8,21 @@
   <title>RSS</title>
 </head>
 <body>
-  <div class="header m-2 rounded shadow clearfix">
+  <div class="header m-2 rounded shadow border border-dark">
     <h1 class="title d-inline"></h1>
     <button type="button" class="language btn btn-secondary m-1 float-right d-inline"></button>
-    
   </div>
-  <div class="input m-2 rounded shadow">
-    <input class="form-control form-control-lg url-input" type="text" placeholder="">
-    <p class="lead mt-3">
-      <a class="shadow btn btn-primary btn-lg rss-add" href="#" role="button"></a>
-    </p>
-    <p>http://lorem-rss.herokuapp.com/feed</p>
-    <p>https://news.yandex.ru/health.rss</p>
+
+  <div class="input m-2 pb-4 rounded shadow border border-dark">
+    <input class="url-input mb-1 form-control form-control-lg" type="text" placeholder="">
+      <button type="button" class="rss-add mt-2 shadow btn btn-primary btn-lg float-left d-inline"></button>
+      <p class="error mt-2 text-right text-danger invisible">ErrorErrorErrorError</p>
+    <!-- <p>http://lorem-rss.herokuapp.com/feed</p> -->
+    <!-- <p>https://news.yandex.ru/health.rss</p> -->
   </div>
-  <div class="output m-2 rounded shadow">
+
+  <div class="output invisible m-2 rounded shadow border border-dark">
   </div>
+
 </body>
 </html>

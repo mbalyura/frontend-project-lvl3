@@ -3,10 +3,13 @@ import axios from 'axios';
 import parser from './parser/parser';
 import renderFeed from './renders/feed-render';
 import renderPage from './renders/page-render';
+import renderError from './renders/error-render';
+
 
 const urlInput = document.querySelector('.url-input');
 const addRssButton = document.querySelector('.rss-add');
 const outputContainer = document.querySelector('.output');
+const errorContainer = document.querySelector('.error');
 
 export default (state) => {
   watch(state, 'language', () => {
@@ -27,6 +30,8 @@ export default (state) => {
   watch(state, 'feedUrls', () => {
     // urlInput.value = ''; // clear input
     outputContainer.innerHTML = '';
+    errorContainer.innerHTML = ' ';
+
     const corsUrl = 'https://cors-anywhere.herokuapp.com/';
 
     state.feedUrls.forEach((feedUrl) => {
@@ -36,7 +41,8 @@ export default (state) => {
           renderFeed(parsedFeed, state.language);
         })
         .catch((error) => {
-          console.log('error: ', error);
+          console.log('watch error!! ', error);
+          renderError('network', state.language);
         });
     });
   });

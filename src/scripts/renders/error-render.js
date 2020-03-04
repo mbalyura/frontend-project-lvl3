@@ -1,0 +1,14 @@
+import i18next from 'i18next';
+import resources from '../locales';
+
+const errorContainer = document.querySelector('.error');
+
+export default (errorName, lng) => {
+  i18next
+    .init({ lng, debug: true, resources })
+    .then((t) => {
+      console.log('errrrrrr', lng);
+      errorContainer.innerText = t(`errors.${errorName}`);
+      errorContainer.classList.remove('invisible');
+    });
+};

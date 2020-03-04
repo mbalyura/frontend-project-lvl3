@@ -20,8 +20,8 @@ const urlValidate = string().url();
 
 langSwitcher.addEventListener('click', (e) => {
   e.preventDefault();
-  const swithLoop = { en: 'ru', ru: 'en' };
-  state.language = swithLoop[state.language];
+  const loop = { en: 'ru', ru: 'en' };
+  state.language = loop[state.language];
 });
 
 urlInput.addEventListener('input', (e) => {

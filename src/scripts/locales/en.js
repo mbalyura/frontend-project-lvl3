@@ -1,7 +1,7 @@
 export default {
   translation: {
     mainHead: 'Simple RSS Aggregator',
-    lang: 'рус',
+    lang: 'RU',
     input: {
       placeholder: '...rss adress',
       button: 'add RSS',
@@ -10,6 +10,11 @@ export default {
       feedsHead: 'Your Feeds',
       postsHead: 'Posts',
       readMore: 'Read more',
+    },
+    errors: {
+      invalid: 'Input adress is invalid',
+      double: 'You already subscribed on this feed',
+      network: 'Network error. Try again later',
     },
   },
 };

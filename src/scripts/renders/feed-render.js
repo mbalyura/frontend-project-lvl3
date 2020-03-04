@@ -10,7 +10,7 @@ export default (feed, lng) => {
       const row = document.createElement('div');
       row.classList.add('row');
       const feedsContainer = document.createElement('div');
-      feedsContainer.classList.add('feeds-container', 'col-md-3');
+      feedsContainer.classList.add('feeds-container', 'col-md-3', 'border-right', 'border-dark');
       const postsContainer = document.createElement('div');
       postsContainer.classList.add('posts-container', 'col-md-9');
 
@@ -24,6 +24,7 @@ export default (feed, lng) => {
         const postHead = document.createElement('h5');
         const postDescription = document.createElement('p');
         const link = document.createElement('a');
+        link.classList.add('read-more');
         postHead.innerText = post.title;
         postDescription.innerText = post.description;
         link.innerText = t('output.readMore');
@@ -33,5 +34,6 @@ export default (feed, lng) => {
 
       row.append(feedsContainer, postsContainer);
       outputContainer.append(row);
+      outputContainer.classList.remove('invisible');
     });
 };
