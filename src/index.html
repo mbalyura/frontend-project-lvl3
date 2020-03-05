@@ -9,16 +9,22 @@
 </head>
 <body>
   <div class="header m-2 rounded shadow border border-dark">
-    <h1 class="title d-inline"></h1>
-    <button type="button" class="language btn btn-secondary m-1 float-right d-inline"></button>
+    <h2 class="title d-inline"></h1>
+    <button type="button" class="language btn btn-secondary float-right d-inline"></button>
   </div>
 
-  <div class="input m-2 pb-4 rounded shadow border border-dark">
-    <input class="url-input mb-1 form-control form-control-lg" type="text" placeholder="">
-      <button type="button" class="rss-add mt-2 shadow btn btn-primary btn-lg float-left d-inline"></button>
-      <p class="error mt-2 text-right text-danger invisible">ErrorErrorErrorError</p>
-    <!-- <p>http://lorem-rss.herokuapp.com/feed</p> -->
-    <!-- <p>https://news.yandex.ru/health.rss</p> -->
+  <div class="input m-2 rounded shadow border border-dark">
+    <input class="url-input form-control form-control-lg" type="text" placeholder="">
+      <div class="row mt-2">
+        <div class="col-md-4">
+          <button type="button" class="rss-add shadow btn btn-primary btn-lg"></button>
+        </div>
+        <div class="col-md-8">
+          <p class="error text-right text-danger invisible"></p>
+        </div>
+      </div>
+    <!-- http://lorem-rss.herokuapp.com/feed -->
+    <!-- https://news.yandex.ru/health.rss -->
   </div>
 
   <div class="output invisible m-2 rounded shadow border border-dark">

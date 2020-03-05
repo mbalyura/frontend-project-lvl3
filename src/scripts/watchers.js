@@ -1,6 +1,4 @@
 import { watch } from 'melanke-watchjs';
-import axios from 'axios';
-import parser from './parser/parser';
 import renderFeed from './renders/feed-render';
 import renderPage from './renders/page-render';
 import renderError from './renders/error-render';
@@ -18,7 +16,7 @@ export default (state) => {
 
   watch(state, 'urlInputValidity', () => {
     if (!state.urlInputValidity) {
-      console.log('input is not valid!');
+      console.log('watch inputvalidity !input is not valid!');
       urlInput.classList.add('is-invalid');
       addRssButton.classList.add('disabled');
     } else {
@@ -27,23 +25,20 @@ export default (state) => {
     }
   });
 
-  watch(state, 'feedUrls', () => {
-    // urlInput.value = ''; // clear input
+  watch(state, 'feeds', () => {
+    urlInput.value = ''; // clear input
     outputContainer.innerHTML = '';
-    errorContainer.innerHTML = ' ';
 
-    const corsUrl = 'https://cors-anywhere.herokuapp.com/';
+    state.feeds.forEach((feed) => {
+      renderFeed(feed, state.language);
+    });
+  });
 
-    state.feedUrls.forEach((feedUrl) => {
-      axios.get(`${corsUrl}${feedUrl}`)
-        .then((response) => {
-          const parsedFeed = parser(response.data);
-          renderFeed(parsedFeed, state.language);
-        })
-        .catch((error) => {
-          console.log('watch error!! ', error);
-          renderError('network', state.language);
-        });
+  watch(state, 'errors', () => {
+    errorContainer.innerHTML = '';
+
+    state.errors.forEach((feed) => {
+      renderError(feed, state.language);
     });
   });
 };

@@ -7,7 +7,7 @@ export default (errorName, lng) => {
   i18next
     .init({ lng, debug: true, resources })
     .then((t) => {
-      console.log('errrrrrr', lng);
+      console.log('error render');
       errorContainer.innerText = t(`errors.${errorName}`);
       errorContainer.classList.remove('invisible');
     });

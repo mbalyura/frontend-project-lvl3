@@ -1,22 +1,30 @@
 // import 'bootstrap';
 import '../styles/style.css';
 import { string } from 'yup';
-import watch from './watchers';
+import axios from 'axios';
+import parser from './parser/parser';
+import myWatch from './watchers';
 
 const state = {
   language: '',
-  feedUrls: [],
   urlInputValidity: true,
+  feedUrls: [],
+  feeds: [],
+  errors: [],
 };
 
-watch(state);
+myWatch(state);
 
 state.language = 'ru';
+
 
 const urlInput = document.querySelector('.url-input');
 const addRssButton = document.querySelector('.rss-add');
 const langSwitcher = document.querySelector('.language');
+
+const corsUrl = 'https://cors-anywhere.herokuapp.com/';
 const urlValidate = string().url();
+const isDouble = (url) => state.feedUrls.includes(url);
 
 langSwitcher.addEventListener('click', (e) => {
   e.preventDefault();
@@ -26,15 +34,25 @@ langSwitcher.addEventListener('click', (e) => {
 
 urlInput.addEventListener('input', (e) => {
   const { value } = e.target;
-  const isDouble = state.feedUrls.includes(value);
   urlValidate.isValid(value).then((validity) => {
-    state.urlInputValidity = validity && !isDouble;
+    state.urlInputValidity = validity && !isDouble(value);
   });
 });
 
 addRssButton.addEventListener('click', (e) => {
   e.preventDefault();
-  if (state.urlInputValidity) {
-    state.feedUrls.push(urlInput.value);
+  const feedUrl = urlInput.value;
+  if (state.urlInputValidity && feedUrl) {
+    state.feedUrls.push(feedUrl);
+    axios.get(`${corsUrl}${feedUrl}`)
+      .then((response) => {
+        const parsedFeed = parser(response.data);
+        state.feeds.push(parsedFeed);
+      })
+      .catch((error) => {
+        console.log('axios get error!!! ', error);
+        state.errors.push(error);
+      });
   }
+  console.log('state: ', state);
 });

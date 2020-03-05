@@ -14,7 +14,7 @@ export default {
     errors: {
       invalid: 'Input adress is invalid',
       double: 'You already subscribed on this feed',
-      network: 'Network error. Try again later',
+      network: 'Network error or wrong adress. Chek and try again',
     },
   },
 };
