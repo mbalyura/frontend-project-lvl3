@@ -5,14 +5,17 @@ const outputContainer = document.querySelector('.output');
 
 export default (feed, lng) => {
   i18next
-    .init({ lng, debug: true, resources })
+    .init({ lng, debug: false, resources })
     .then((t) => {
       const row = document.createElement('div');
       row.classList.add('row');
       const feedsContainer = document.createElement('div');
       feedsContainer.classList.add('feeds-container', 'col-md-3', 'border-right', 'border-dark');
+      // feedsContainer.setAttribute('id', feed.id);
+
       const postsContainer = document.createElement('div');
       postsContainer.classList.add('posts-container', 'col-md-9');
+      postsContainer.setAttribute('id', feed.id);
 
       const feedHead = document.createElement('h4');
       const feedDescription = document.createElement('p');
@@ -22,7 +25,7 @@ export default (feed, lng) => {
 
       feed.getPosts().forEach((post) => {
         const postHead = document.createElement('h5');
-        const postDescription = document.createElement('p');
+        const postDescription = document.createElement('span');
         const link = document.createElement('a');
         link.classList.add('read-more');
         postHead.innerText = post.title;

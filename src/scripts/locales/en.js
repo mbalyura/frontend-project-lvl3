@@ -9,7 +9,7 @@ export default {
     output: {
       feedsHead: 'Your Feeds',
       postsHead: 'Posts',
-      readMore: 'Read more',
+      readMore: ' ...read more >>>',
     },
     errors: {
       invalid: 'Input adress is invalid',

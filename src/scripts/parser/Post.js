@@ -3,6 +3,6 @@ export default class Post {
     this.title = title;
     this.link = link;
     this.description = description;
-    this.feedId = feedId;
+    this.id = feedId;
   }
 }

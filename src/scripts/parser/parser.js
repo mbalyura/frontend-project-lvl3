@@ -1,4 +1,5 @@
-import _ from 'lodash';
+// import _ from 'lodash';
+import hash from 'short-hash';
 import Feed from './Feed';
 import Post from './Post';
 
@@ -9,7 +10,7 @@ export default (data) => {
 
   const feedTitle = parsedResponse.querySelector('title').textContent;
   const feedDescription = parsedResponse.querySelector('description').textContent;
-  const feedId = _.uniqueId();
+  const feedId = hash(parsedResponse.querySelector('link').textContent);
 
   const feed = new Feed(feedTitle, feedDescription, feedId);
 

@@ -2,6 +2,7 @@ import { watch } from 'melanke-watchjs';
 import renderFeed from './renders/feed-render';
 import renderPage from './renders/page-render';
 import renderError from './renders/error-render';
+import renderNewPosts from './renders/news-render';
 
 
 const urlInput = document.querySelector('.url-input');
@@ -14,8 +15,8 @@ export default (state) => {
     renderPage(state.language);
   });
 
-  watch(state, 'urlInputValidity', () => {
-    if (!state.urlInputValidity) {
+  watch(state, 'inputValidity', () => {
+    if (!state.inputValidity) {
       console.log('watch inputvalidity !input is not valid!');
       urlInput.classList.add('is-invalid');
       addRssButton.classList.add('disabled');
@@ -25,13 +26,20 @@ export default (state) => {
     }
   });
 
-  watch(state, 'feeds', () => {
-    urlInput.value = ''; // clear input
+  watch(state, 'feedUrls', () => { // TODO: watching for status maybe???
+    // console.log('!!!!state: ', state);
+    // urlInput.value = ''; // clear input
     outputContainer.innerHTML = '';
-
-    state.feeds.forEach((feed) => {
+    console.log('Object.values(state.feeds): ', Object.values(state.feeds));
+    Object.values(state.feeds).forEach((feed) => {
       renderFeed(feed, state.language);
     });
+  });
+
+  watch(state, 'newPosts', () => {
+    if (state.newPosts.length) {
+      renderNewPosts(state.newPosts, state.language);
+    }
   });
 
   watch(state, 'errors', () => {
