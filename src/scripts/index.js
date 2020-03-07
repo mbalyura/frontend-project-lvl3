@@ -19,8 +19,7 @@ const state = {
 
 myWatch(state);
 
-state.language = 'ru';
-
+state.language = navigator.language.slice(0, 2) || 'en';
 
 const urlInput = document.querySelector('.url-input');
 const addRssButton = document.querySelector('.rss-add');
@@ -28,8 +27,9 @@ const langSwitcher = document.querySelector('.language');
 
 // const corsUrl = 'https://cors-anywhere.herokuapp.com/';
 const corsUrl = 'http://localhost:8080/';
-const urlValidate = string().url();
-const isDouble = (url) => state.feedUrls.includes(url);
+
+const urlValidate = (url) => string().url().isValid(url)
+  .then((isUrl) => isUrl && !state.feedUrls.includes(url));
 
 const getParcedFeed = (feedUrl) => axios.get(`${corsUrl}${feedUrl}`)
   .then((response) => parser(response.data))
@@ -37,7 +37,6 @@ const getParcedFeed = (feedUrl) => axios.get(`${corsUrl}${feedUrl}`)
     console.log('getParcedFeed axios error!!! ', error);
     state.errors.push('network');
   });
-
 
 const getNewPostsInLoop = () => {
   state.newPosts.forEach((post) => state.feeds[post.id].posts.unshift(post));
@@ -62,8 +61,9 @@ langSwitcher.addEventListener('click', (e) => {
 
 urlInput.addEventListener('input', (e) => {
   const { value } = e.target;
-  urlValidate.isValid(value).then((validity) => {
-    state.inputValidity = validity && !isDouble(value);
+  urlValidate(value).then((validity) => {
+  console.log("validity", validity)
+    state.inputValidity = validity;
   });
 });
 

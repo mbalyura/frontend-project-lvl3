@@ -12,3 +12,7 @@ deploy:
 	surge dist rss-aggregator.surge.sh
 git:
 	git add . && git commit && git push
+cors:
+	node cors/cors.js
+
+.PHONY : cors
