@@ -1,11 +1,10 @@
-const host = process.env.HOST || '0.0.0.0';
-
-const port = process.env.PORT || 8080;
-
 const corsProxy = require('cors-anywhere');
 
+const host = process.env.HOST || '0.0.0.0';
+const port = process.env.PORT || 8080;
+
 corsProxy.createServer({
-  originWhitelist: [], // Allow all origins
+  originWhitelist: [],
   requireHeader: ['origin', 'x-requested-with'],
   removeHeaders: ['cookie', 'cookie2'],
 }).listen(port, host, () => {

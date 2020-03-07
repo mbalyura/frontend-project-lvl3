@@ -1,4 +1,4 @@
-// import 'bootstrap';
+import 'bootstrap';
 import '../styles/style.css';
 import { string } from 'yup';
 import axios from 'axios';
@@ -13,44 +13,40 @@ const state = {
   feedUrls: [],
   feeds: {},
   newPosts: [],
-  errors: [],
-  status: '', // updated/pending
+  error: null,
+  status: 'init', // updated/pending
 };
 
 myWatch(state);
 
-state.language = navigator.language.slice(0, 2) || 'en';
+state.language = 'en';
 
 const urlInput = document.querySelector('.url-input');
 const addRssButton = document.querySelector('.rss-add');
 const langSwitcher = document.querySelector('.language');
 
-// const corsUrl = 'https://cors-anywhere.herokuapp.com/';
-const corsUrl = 'http://localhost:8080/';
+const corsUrl = 'https://cors-anywhere.herokuapp.com/';
+// const corsUrl = 'http://localhost:8080/';
 
 const urlValidate = (url) => string().url().isValid(url)
   .then((isUrl) => isUrl && !state.feedUrls.includes(url));
 
 const getParcedFeed = (feedUrl) => axios.get(`${corsUrl}${feedUrl}`)
-  .then((response) => parser(response.data))
-  .catch((error) => {
-    console.log('getParcedFeed axios error!!! ', error);
-    state.errors.push('network');
-  });
+  .then((response) => parser(response.data));
 
 const getNewPostsInLoop = () => {
-  state.newPosts.forEach((post) => state.feeds[post.id].posts.unshift(post));
+  console.log('!!!', new Date()); // TODO: REFACTOR!!!
+  state.newPosts.forEach((post) => state.feeds[post.id].posts.unshift(state.newPosts.pop()));
   state.newPosts = [];
   Promise.all(state.feedUrls.map(getParcedFeed))
     .then((parsedFeeds) => {
       const newPosts = parsedFeeds.map((newFeed) => {
         const oldFeed = state.feeds[newFeed.id];
         return _.differenceWith(newFeed.posts, oldFeed.posts, _.isEqual);
-      }).flat().sort((a, b) => (a.title > b.title ? 1 : -1));
+      }).flat().reverse();
       state.newPosts = newPosts;
-      console.log('state: ', state);
     });
-  setTimeout(() => getNewPostsInLoop(), 5000);
+  setTimeout(() => getNewPostsInLoop(), 10000);
 };
 
 langSwitcher.addEventListener('click', (e) => {
@@ -60,9 +56,10 @@ langSwitcher.addEventListener('click', (e) => {
 });
 
 urlInput.addEventListener('input', (e) => {
+  state.error = null;
   const { value } = e.target;
   urlValidate(value).then((validity) => {
-  console.log("validity", validity)
+    if (!validity) state.error = 'invalid';
     state.inputValidity = validity;
   });
 });
@@ -74,8 +71,15 @@ addRssButton.addEventListener('click', (e) => {
     getParcedFeed(feedUrl)
       .then((parsedFeed) => {
         state.feeds[parsedFeed.id] = parsedFeed;
-        state.feedUrls.push(feedUrl); // FIXME: change state.status ???
-        setTimeout(getNewPostsInLoop, 5000);
+        state.feedUrls.push(feedUrl);
+        if (state.status === 'init') {
+          getNewPostsInLoop();
+          state.status = 'updating';
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        state.error = 'network';
       });
   }
 });
