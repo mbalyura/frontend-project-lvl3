@@ -1,11 +1,11 @@
 import i18next from 'i18next';
 import resources from '../locales';
 
-export default (posts, lng) => {
+export default ({ newPostsBuffer, language }) => {
   i18next
-    .init({ lng, debug: false, resources })
+    .init({ lng: language, debug: false, resources })
     .then((t) => {
-      posts.forEach((post) => {
+      newPostsBuffer.forEach((post) => {
         const postContainer = document.getElementById(post.id);
         const postHead = document.createElement('h5');
         const postDescription = document.createElement('span');

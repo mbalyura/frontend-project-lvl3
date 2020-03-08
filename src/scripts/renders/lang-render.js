@@ -1,13 +1,14 @@
 import i18next from 'i18next';
 import resources from '../locales';
 
-const title = document.querySelector('.title');
-const langSwitcher = document.querySelector('.language');
-const urlInput = document.querySelector('.url-input');
-const addRssButton = document.querySelector('.rss-add');
-const errorContainer = document.querySelector('.error');
 
 export default ({ language, error }) => {
+  const title = document.querySelector('.title');
+  const langSwitcher = document.querySelector('.language');
+  const urlInput = document.querySelector('.url-input');
+  const addRssButton = document.querySelector('.rss-add');
+  const errorContainer = document.querySelector('.error');
+
   i18next
     .init({ lng: language, debug: false, resources })
     .then((t) => {
@@ -15,7 +16,7 @@ export default ({ language, error }) => {
       addRssButton.innerText = t('input.button');
       langSwitcher.innerText = t('lang');
       title.innerText = t('mainHead');
-      errorContainer.innerText = t(`errors.${error}`);
+      errorContainer.innerText = error ? t(`errors.${error}`) : '';
       const links = document.querySelectorAll('.read-more');
       if (links.length !== 0) {
         links.forEach((link) => {

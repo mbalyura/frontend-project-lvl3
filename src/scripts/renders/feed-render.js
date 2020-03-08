@@ -1,9 +1,10 @@
 import i18next from 'i18next';
 import resources from '../locales';
 
-const outputContainer = document.querySelector('.output');
 
 export default (feed, lng) => {
+  const outputContainer = document.querySelector('.output');
+
   i18next
     .init({ lng, debug: false, resources })
     .then((t) => {
@@ -36,7 +37,7 @@ export default (feed, lng) => {
       });
 
       row.append(feedsContainer, postsContainer);
-      outputContainer.append(row);
+      outputContainer.prepend(row);
       outputContainer.classList.remove('invisible');
     });
 };

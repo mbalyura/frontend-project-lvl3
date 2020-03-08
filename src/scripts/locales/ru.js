@@ -9,7 +9,7 @@ export default {
     output: {
       feedsHead: 'Ваши каналы',
       postsHead: 'Новости',
-      readMore: ' ...читать полностью >>>',
+      readMore: ' Читать полностью >>>',
     },
     errors: {
       invalid: 'Введенный адрес некорректен',

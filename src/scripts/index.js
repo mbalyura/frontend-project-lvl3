@@ -10,9 +10,9 @@ import myWatch from './watchers';
 const state = {
   language: '',
   inputValidity: true,
-  feedUrls: [],
   feeds: {},
-  newPosts: [],
+  feedUrls: [],
+  newPostsBuffer: [],
   error: null,
   status: 'init', // updated/pending
 };
@@ -25,26 +25,31 @@ const urlInput = document.querySelector('.url-input');
 const addRssButton = document.querySelector('.rss-add');
 const langSwitcher = document.querySelector('.language');
 
-const corsUrl = 'https://cors-anywhere.herokuapp.com/';
-// const corsUrl = 'http://localhost:8080/';
+// const corsUrl = 'https://cors-anywhere.herokuapp.com/';
+const corsUrl = 'http://localhost:8080/';
 
 const urlValidate = (url) => string().url().isValid(url)
   .then((isUrl) => isUrl && !state.feedUrls.includes(url));
 
-const getParcedFeed = (feedUrl) => axios.get(`${corsUrl}${feedUrl}`)
+const getParsedFeed = (feedUrl) => axios.get(`${corsUrl}${feedUrl}`)
   .then((response) => parser(response.data));
 
+const clearNewPostsBuffer = () => {
+  state.newPostsBuffer.forEach((post) => state.feeds[post.id].addPost(post));
+  state.newPostsBuffer = [];
+};
+
 const getNewPostsInLoop = () => {
-  console.log('!!!', new Date()); // TODO: REFACTOR!!!
-  state.newPosts.forEach((post) => state.feeds[post.id].posts.unshift(state.newPosts.pop()));
-  state.newPosts = [];
-  Promise.all(state.feedUrls.map(getParcedFeed))
+  console.log('start loop!!!');
+  clearNewPostsBuffer();
+  Promise.all(state.feedUrls.map(getParsedFeed))
     .then((parsedFeeds) => {
       const newPosts = parsedFeeds.map((newFeed) => {
         const oldFeed = state.feeds[newFeed.id];
-        return _.differenceWith(newFeed.posts, oldFeed.posts, _.isEqual);
+        return _.differenceWith(newFeed.getPosts(), oldFeed.getPosts(), _.isEqual);
       }).flat().reverse();
-      state.newPosts = newPosts;
+      state.newPostsBuffer = newPosts;
+      console.log('end loop!!!');
     });
   setTimeout(() => getNewPostsInLoop(), 10000);
 };
@@ -68,13 +73,15 @@ addRssButton.addEventListener('click', (e) => {
   e.preventDefault();
   const feedUrl = urlInput.value;
   if (state.inputValidity && feedUrl) {
-    getParcedFeed(feedUrl)
+    console.log('loading');
+    getParsedFeed(feedUrl)
       .then((parsedFeed) => {
         state.feeds[parsedFeed.id] = parsedFeed;
         state.feedUrls.push(feedUrl);
         if (state.status === 'init') {
           getNewPostsInLoop();
-          state.status = 'updating';
+          state.status = 'loaded';
+          console.log('loaded');
         }
       })
       .catch((err) => {
