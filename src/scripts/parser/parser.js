@@ -1,12 +1,9 @@
-// import _ from 'lodash';
 import hash from 'short-hash';
 import Feed from './Feed';
 import Post from './Post';
 
-
 export default (data) => {
-  const domParser = new DOMParser().parseFromString.bind(new DOMParser());
-  const parsedResponse = domParser(data, 'text/xml');
+  const parsedResponse = new DOMParser().parseFromString(data, 'text/xml');
 
   const feedTitle = parsedResponse.querySelector('title').textContent;
   const feedDescription = parsedResponse.querySelector('description').textContent;

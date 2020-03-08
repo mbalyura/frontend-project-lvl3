@@ -6,19 +6,19 @@ import renderError from './renders/error-render';
 import renderNewPosts from './renders/news-render';
 
 const outputContainer = document.querySelector('.output');
-const urlInput = document.querySelector('.url-input');
+// const urlInput = document.querySelector('.url-input');
 
 export default (state) => {
   watch(state, 'language', () => {
     renderLanguage(state);
   });
 
-  watch(state, 'inputValidity', () => {
+  watch(state, ['inputValidity', 'status'], () => {
     renderInput(state);
   });
 
   watch(state, 'feedUrls', () => { // TODO: watching for status maybe???
-    urlInput.value = ''; // clear input
+    // urlInput.value = ''; // clear input
     outputContainer.innerHTML = '';
     Object.values(state.feeds).forEach((feed) => {
       renderFeed(feed, state.language);

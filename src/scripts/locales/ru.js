@@ -4,7 +4,8 @@ export default {
     lang: 'EN',
     input: {
       placeholder: '...rss адрес',
-      button: 'добавить RSS',
+      button: 'Подписаться',
+      loading: 'Загрузка',
     },
     output: {
       feedsHead: 'Ваши каналы',

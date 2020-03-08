@@ -3,8 +3,9 @@ export default {
     mainHead: 'Simple RSS Aggregator',
     lang: 'RU',
     input: {
-      placeholder: '...rss adress',
-      button: 'add RSS',
+      placeholder: '...rss link',
+      button: 'Follow',
+      loading: 'Loading',
     },
     output: {
       feedsHead: 'Your Feeds',

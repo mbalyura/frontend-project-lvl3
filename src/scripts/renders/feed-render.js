@@ -12,7 +12,6 @@ export default (feed, lng) => {
       row.classList.add('row');
       const feedsContainer = document.createElement('div');
       feedsContainer.classList.add('feeds-container', 'col-md-3', 'border-right', 'border-dark');
-      // feedsContainer.setAttribute('id', feed.id);
 
       const postsContainer = document.createElement('div');
       postsContainer.classList.add('posts-container', 'col-md-9');

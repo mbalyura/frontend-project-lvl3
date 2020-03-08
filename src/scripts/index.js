@@ -14,7 +14,7 @@ const state = {
   feedUrls: [],
   newPostsBuffer: [],
   error: null,
-  status: 'init', // updated/pending
+  status: 'initial', // updated/pending
 };
 
 myWatch(state);
@@ -40,7 +40,7 @@ const clearNewPostsBuffer = () => {
 };
 
 const getNewPostsInLoop = () => {
-  console.log('start loop!!!');
+  console.log('start update!!!');
   clearNewPostsBuffer();
   Promise.all(state.feedUrls.map(getParsedFeed))
     .then((parsedFeeds) => {
@@ -49,9 +49,9 @@ const getNewPostsInLoop = () => {
         return _.differenceWith(newFeed.getPosts(), oldFeed.getPosts(), _.isEqual);
       }).flat().reverse();
       state.newPostsBuffer = newPosts;
-      console.log('end loop!!!');
+      console.log('end update!!!');
     });
-  setTimeout(() => getNewPostsInLoop(), 10000);
+  setTimeout(getNewPostsInLoop, 10000);
 };
 
 langSwitcher.addEventListener('click', (e) => {
@@ -73,19 +73,19 @@ addRssButton.addEventListener('click', (e) => {
   e.preventDefault();
   const feedUrl = urlInput.value;
   if (state.inputValidity && feedUrl) {
-    console.log('loading');
+    if (state.status === 'initial') {
+      setTimeout(getNewPostsInLoop, 10000);
+    }
+    state.status = 'loading';
     getParsedFeed(feedUrl)
       .then((parsedFeed) => {
         state.feeds[parsedFeed.id] = parsedFeed;
         state.feedUrls.push(feedUrl);
-        if (state.status === 'init') {
-          getNewPostsInLoop();
-          state.status = 'loaded';
-          console.log('loaded');
-        }
+        state.status = 'loaded';
       })
       .catch((err) => {
         console.error(err);
+        state.status = 'error';
         state.error = 'network';
       });
   }
