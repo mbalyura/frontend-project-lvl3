@@ -8,12 +8,12 @@ import myWatch from './watchers';
 
 const state = {
   language: '',
+  status: 'initial', // loading/loaded/failed
   inputValidity: true,
   feeds: {},
   feedUrls: [],
   newPostsBuffer: [],
   error: null,
-  status: 'initial', // updated/pending
 };
 
 myWatch(state);
@@ -24,8 +24,8 @@ const urlInput = document.querySelector('.url-input');
 const addRssButton = document.querySelector('.rss-add');
 const langSwitcher = document.querySelector('.language');
 
-// const corsUrl = 'https://cors-anywhere.herokuapp.com/';
-const corsUrl = 'http://localhost:8080/';
+const corsUrl = 'https://cors-anywhere.herokuapp.com/';
+// const corsUrl = 'http://localhost:8080/';
 
 const urlValidate = (url) => string().url().isValid(url);
 
@@ -86,7 +86,7 @@ addRssButton.addEventListener('click', (e) => {
       })
       .catch((err) => {
         console.error(err);
-        state.status = 'error';
+        state.status = 'failed';
         state.error = 'network';
       });
   }
