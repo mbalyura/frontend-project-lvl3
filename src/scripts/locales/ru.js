@@ -8,8 +8,8 @@ export default {
       loading: 'Загрузка',
     },
     output: {
-      feedsHead: 'Ваши каналы',
-      postsHead: 'Новости',
+      feedsHeader: 'Ваши каналы',
+      postsHeader: 'Новости',
       readMore: ' Читать полностью >>>',
     },
     errors: {

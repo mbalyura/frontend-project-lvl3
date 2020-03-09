@@ -1,4 +1,3 @@
-import 'bootstrap';
 import '../styles/style.css';
 import { string } from 'yup';
 import axios from 'axios';
@@ -28,8 +27,9 @@ const langSwitcher = document.querySelector('.language');
 // const corsUrl = 'https://cors-anywhere.herokuapp.com/';
 const corsUrl = 'http://localhost:8080/';
 
-const urlValidate = (url) => string().url().isValid(url)
-  .then((isUrl) => isUrl && !state.feedUrls.includes(url));
+const urlValidate = (url) => string().url().isValid(url);
+
+const isUrlDouble = (url) => state.feedUrls.includes(url);
 
 const getParsedFeed = (feedUrl) => axios.get(`${corsUrl}${feedUrl}`)
   .then((response) => parser(response.data));
@@ -63,9 +63,10 @@ langSwitcher.addEventListener('click', (e) => {
 urlInput.addEventListener('input', (e) => {
   state.error = null;
   const { value } = e.target;
+  if (isUrlDouble(value)) state.error = 'double';
   urlValidate(value).then((validity) => {
     if (!validity) state.error = 'invalid';
-    state.inputValidity = validity;
+    state.inputValidity = validity && !isUrlDouble(value);
   });
 });
 

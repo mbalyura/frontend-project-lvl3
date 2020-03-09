@@ -1,12 +1,9 @@
 import { watch } from 'melanke-watchjs';
 import renderInput from './renders/input-render';
-import renderFeed from './renders/feed-render';
+import renderFeeds from './renders/feeds-render';
 import renderLanguage from './renders/lang-render';
 import renderError from './renders/error-render';
 import renderNewPosts from './renders/news-render';
-
-const outputContainer = document.querySelector('.output');
-// const urlInput = document.querySelector('.url-input');
 
 export default (state) => {
   watch(state, 'language', () => {
@@ -17,12 +14,8 @@ export default (state) => {
     renderInput(state);
   });
 
-  watch(state, 'feedUrls', () => { // TODO: watching for status maybe???
-    // urlInput.value = ''; // clear input
-    outputContainer.innerHTML = '';
-    Object.values(state.feeds).forEach((feed) => {
-      renderFeed(feed, state.language);
-    });
+  watch(state, 'feedUrls', () => {
+    renderFeeds(state);
   });
 
   watch(state, 'newPostsBuffer', () => {
