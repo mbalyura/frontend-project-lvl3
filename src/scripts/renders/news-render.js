@@ -11,13 +11,14 @@ export default ({ newPostsBuffer, language }) => {
       newPostsBuffer.forEach((post) => {
         const postContainer = document.getElementById(post.id);
         const postHead = document.createElement('h6');
-        const postDescription = document.createElement('span');
+        const postDescription = document.createElement('small');
         const link = document.createElement('a');
+
         postHead.innerText = post.title;
         postHead.classList.add('mt-2', 'mb-0');
         postDescription.innerText = post.description;
-        link.classList.add('read-more');
         link.innerText = t('output.readMore');
+        link.classList.add('read-more');
         link.href = post.link;
         postContainer.prepend(postHead, postDescription, link);
       });

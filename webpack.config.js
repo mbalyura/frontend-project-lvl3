@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 // const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
@@ -17,21 +16,12 @@ module.exports = {
         include: path.resolve(__dirname, 'src/scripts'),
         loader: 'babel-loader',
       },
-      {
-        test: /\.css$/,
-        include: path.resolve(__dirname, 'src'),
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-        ],
-      },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html',
     }),
-    new MiniCssExtractPlugin(),
     new CleanWebpackPlugin(),
     // new BundleAnalyzerPlugin(),
   ],

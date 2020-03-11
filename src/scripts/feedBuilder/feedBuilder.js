@@ -1,13 +1,13 @@
 import hash from 'short-hash';
 import Feed from './Feed';
 import Post from './Post';
+import parser from '../parser';
 
 export default (data) => {
-  const parsedResponse = new DOMParser().parseFromString(data, 'text/xml');
-
+  const parsedResponse = parser(data);
   const feedTitle = parsedResponse.querySelector('title').textContent;
   const feedDescription = parsedResponse.querySelector('description').textContent;
-  const feedId = hash(parsedResponse.querySelector('title').textContent);
+  const feedId = hash(feedTitle);
 
   const feed = new Feed(feedTitle, feedDescription, feedId);
 
@@ -20,5 +20,6 @@ export default (data) => {
     const currentPost = new Post(title, link, description, feedId);
     feed.addPost(currentPost);
   });
+
   return feed;
 };

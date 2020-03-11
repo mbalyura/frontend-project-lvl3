@@ -1,7 +1,6 @@
 import i18next from 'i18next';
 import resources from '../locales';
 
-
 export default ({ language, error }) => {
   const title = document.querySelector('.title');
   const langSwitcher = document.querySelector('.language');

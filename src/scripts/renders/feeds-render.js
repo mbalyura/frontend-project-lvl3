@@ -37,7 +37,7 @@ export default ({ feeds, language }) => {
 
         feed.getPosts().forEach((post) => {
           const postHead = document.createElement('h6');
-          const postDescription = document.createElement('span');
+          const postDescription = document.createElement('small');
           const link = document.createElement('a');
           link.classList.add('read-more');
           postHead.innerText = post.title;
