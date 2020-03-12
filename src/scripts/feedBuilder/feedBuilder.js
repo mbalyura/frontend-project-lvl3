@@ -1,17 +1,15 @@
 import hash from 'short-hash';
 import Feed from './Feed';
 import Post from './Post';
-import parser from '../parser';
 
-export default (data) => {
-  const parsedResponse = parser(data);
-  const feedTitle = parsedResponse.querySelector('title').textContent;
-  const feedDescription = parsedResponse.querySelector('description').textContent;
+export default (domData) => {
+  const feedTitle = domData.querySelector('title').textContent;
+  const feedDescription = domData.querySelector('description').textContent;
   const feedId = hash(feedTitle);
 
   const feed = new Feed(feedTitle, feedDescription, feedId);
 
-  const postItems = parsedResponse.querySelectorAll('item');
+  const postItems = domData.querySelectorAll('item');
   postItems.forEach((postItem) => {
     const title = postItem.querySelector('title').textContent;
     const link = postItem.querySelector('link').textContent;

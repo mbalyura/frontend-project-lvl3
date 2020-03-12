@@ -1,7 +1,7 @@
 import { string } from 'yup';
 import axios from 'axios';
 import _ from 'lodash';
-
+import parseToDom from './parser';
 import buildFeed from './feedBuilder/feedBuilder';
 import myWatch from './watchers';
 
@@ -24,15 +24,16 @@ const app = () => {
   const addRssButton = document.querySelector('.rss-add');
   const langSwitcher = document.querySelector('.language');
 
-  // const corsUrl = 'https://cors-anywhere.herokuapp.com/';
-  const corsUrl = 'http://localhost:8080/';
+  const corsUrl = 'https://cors-anywhere.herokuapp.com/';
+  // const corsUrl = 'http://localhost:8080/';
 
   const urlValidate = (url) => string().url().isValid(url);
 
   const isUrlDouble = (url) => state.feedUrls.includes(url);
 
   const getParsedFeed = (feedUrl) => axios.get(`${corsUrl}${feedUrl}`)
-    .then((response) => buildFeed(response.data));
+    .then(({ data }) => parseToDom(data))
+    .then((domData) => buildFeed(domData));
 
   const clearNewPostsBuffer = () => {
     state.newPostsBuffer.forEach((post) => state.feeds[post.id].addPost(post));
