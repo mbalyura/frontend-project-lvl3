@@ -8,7 +8,7 @@ export default {
       loading: 'Loading',
     },
     output: {
-      feedsHeader: 'Your Feeds',
+      feedsHeader: 'Your feeds',
       postsHeader: 'Posts',
       readMore: ' Read more >>>',
     },

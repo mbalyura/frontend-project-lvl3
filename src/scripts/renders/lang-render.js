@@ -3,9 +3,9 @@ import resources from '../locales';
 
 export default ({ language, error }) => {
   const title = document.querySelector('.title');
-  const langSwitcher = document.querySelector('.language');
+  const langSwitcher = document.querySelector('.language-button');
   const urlInput = document.querySelector('.url-input');
-  const addRssButton = document.querySelector('.rss-add');
+  const followButton = document.querySelector('.follow-button');
   const errorContainer = document.querySelector('.error');
   const feedsHeader = document.querySelector('.feeds-header');
   const postsHeader = document.querySelector('.posts-header');
@@ -14,7 +14,7 @@ export default ({ language, error }) => {
     .init({ lng: language, debug: false, resources })
     .then((t) => {
       urlInput.setAttribute('placeholder', t('input.placeholder'));
-      addRssButton.innerText = t('input.button');
+      followButton.value = t('input.button');
       langSwitcher.innerText = t('lang');
       title.innerText = t('mainHead');
       errorContainer.innerText = error ? t(`errors.${error}`) : '';

@@ -8,25 +8,26 @@
   <title>RSS</title>
 </head>
 <body class="bg-dark">
+
   <div class="header m-2 p-2 bg-light rounded shadow border">
     <h2 class="title d-inline"></h1>
-    <button type="button" class="language btn btn-secondary float-right d-inline"></button>
+    <button type="button" class="language-button btn btn-secondary float-right d-inline"></button>
   </div>
 
-  <div class="input m-2 p-2 bg-light rounded shadow border">
-    <input class="url-input form-control form-control-lg" type="text" placeholder="">
+  <form class="rss-form m-2 p-2 bg-light rounded shadow border">
+    <input type="text" name="url" placeholder="" class="url-input form-control form-control-lg">
       <div class="row mt-2">
         <div class="col-md-4">
-          <button type="button" class="rss-add shadow btn btn-primary btn-lg"></button>
+          <input type="submit" class="follow-button shadow btn btn-primary btn-lg"></input>
         </div>
         <div class="col-md-8">
           <p class="error text-right text-danger mt-2 mb-0 invisible"></p>
         </div>
       </div>
-    </div>
+  </form>
     
-    <div class="output invisible m-2 p-2 bg-light rounded shadow border">
-    </div>
+  <div class="output invisible m-2 p-2 bg-light rounded shadow border">
+  </div>
 
   </body>
 </html>

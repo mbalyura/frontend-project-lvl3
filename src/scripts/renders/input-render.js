@@ -3,20 +3,20 @@ import resources from '../locales';
 
 export default ({ inputValidity, status, language }) => {
   const urlInput = document.querySelector('.url-input');
-  const addRssButton = document.querySelector('.rss-add');
+  const followButton = document.querySelector('.follow-button');
   i18next
     .init({ lng: language, debug: false, resources })
     .then((t) => {
       if (status === 'loading') {
-        addRssButton.classList.add('disabled');
-        addRssButton.innerText = t('input.loading');
+        followButton.classList.add('disabled');
+        followButton.value = t('input.loading');
       } else if (!inputValidity) {
         urlInput.classList.add('is-invalid');
-        addRssButton.classList.add('disabled');
+        followButton.classList.add('disabled');
       } else {
-        addRssButton.innerText = t('input.button');
+        followButton.value = t('input.button');
         urlInput.classList.remove('is-invalid');
-        addRssButton.classList.remove('disabled');
+        followButton.classList.remove('disabled');
       }
     });
 };

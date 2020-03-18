@@ -3,7 +3,7 @@ import axios from 'axios';
 import _ from 'lodash';
 import parseToDom from './parser';
 import buildFeed from './feedBuilder/feedBuilder';
-import myWatch from './watchers';
+import runWatchers from './watchers';
 
 const app = () => {
   const state = {
@@ -16,16 +16,16 @@ const app = () => {
     error: null, // invalid/double/network
   };
 
-  myWatch(state);
+  runWatchers(state);
 
   state.language = 'en';
 
+  const rssForm = document.querySelector('.rss-form');
   const urlInput = document.querySelector('.url-input');
-  const addRssButton = document.querySelector('.rss-add');
-  const langSwitcher = document.querySelector('.language');
+  const langSwitcher = document.querySelector('.language-button');
 
-  const corsUrl = 'https://cors-anywhere.herokuapp.com/';
-  // const corsUrl = 'http://localhost:8080/';
+  // const corsUrl = 'https://cors-anywhere.herokuapp.com/';
+  const corsUrl = 'http://localhost:8080/';
 
   const urlValidate = (url) => string().url().isValid(url);
 
@@ -69,9 +69,10 @@ const app = () => {
     });
   });
 
-  addRssButton.addEventListener('click', (e) => {
+  rssForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const feedUrl = urlInput.value;
+    const formData = new FormData(e.target);
+    const feedUrl = formData.get('url');
     if (state.inputValidity && feedUrl) {
       if (state.status === 'initial') {
         setTimeout(getNewPostsInLoop, 10000);
