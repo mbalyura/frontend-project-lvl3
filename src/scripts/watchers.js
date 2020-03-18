@@ -8,7 +8,6 @@ import renderNewPosts from './renders/news-render';
 import renderError from './renders/error-render';
 
 export default (state) => {
-  console.log('watchers');
   renderLanguage(state);
 
   watch(state, 'language', () => {

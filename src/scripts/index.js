@@ -5,7 +5,6 @@ import _ from 'lodash';
 import i18next from 'i18next';
 import resources from './locales';
 
-import parseToDom from './parser';
 import buildFeed from './feedBuilder/feedBuilder';
 import runWatchers from './watchers';
 
@@ -35,11 +34,7 @@ const app = () => {
   const isUrlDouble = (url) => state.feedUrls.includes(url);
 
   const getParsedFeed = (feedUrl) => axios.get(`${corsUrl}${feedUrl}`)
-    .then((response) => {
-      console.log(response);
-      return parseToDom(response.data)
-    })
-    .then((domData) => buildFeed(domData));
+    .then(({ data }) => buildFeed(data));
 
   const clearNewPostsBuffer = () => {
     state.newPostsBuffer.forEach((post) => state.feeds[post.id].addPost(post));

@@ -2,8 +2,9 @@ import hash from 'short-hash';
 import Feed from './Feed';
 import Post from './Post';
 
-export default (domData) => {
-console.log("domData", domData)
+export default (xmlData) => {
+  const domData = new DOMParser().parseFromString(xmlData, 'text/xml');
+
   const feedTitle = domData.querySelector('title').textContent;
   const feedDescription = domData.querySelector('description').textContent;
   const feedId = hash(feedTitle);
