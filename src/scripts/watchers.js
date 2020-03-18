@@ -1,4 +1,6 @@
 import { watch } from 'melanke-watchjs';
+import i18next from 'i18next';
+
 import renderLanguage from './renders/lang-render';
 import renderInput from './renders/input-render';
 import renderFeeds from './renders/feeds-render';
@@ -6,8 +8,12 @@ import renderNewPosts from './renders/news-render';
 import renderError from './renders/error-render';
 
 export default (state) => {
+  console.log('watchers');
+  renderLanguage(state);
+
   watch(state, 'language', () => {
-    renderLanguage(state);
+    i18next.changeLanguage(state.language)
+      .then(renderLanguage(state));
   });
 
   watch(state, ['inputValidity', 'status'], () => {

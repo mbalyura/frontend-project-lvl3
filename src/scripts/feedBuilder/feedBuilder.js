@@ -3,6 +3,7 @@ import Feed from './Feed';
 import Post from './Post';
 
 export default (domData) => {
+console.log("domData", domData)
   const feedTitle = domData.querySelector('title').textContent;
   const feedDescription = domData.querySelector('description').textContent;
   const feedId = hash(feedTitle);

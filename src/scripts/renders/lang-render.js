@@ -1,7 +1,6 @@
 import i18next from 'i18next';
-import resources from '../locales';
 
-export default ({ language, error }) => {
+export default ({ error }) => {
   const title = document.querySelector('.title');
   const langSwitcher = document.querySelector('.language-button');
   const urlInput = document.querySelector('.url-input');
@@ -10,23 +9,19 @@ export default ({ language, error }) => {
   const feedsHeader = document.querySelector('.feeds-header');
   const postsHeader = document.querySelector('.posts-header');
 
-  i18next
-    .init({ lng: language, debug: false, resources })
-    .then((t) => {
-      urlInput.setAttribute('placeholder', t('input.placeholder'));
-      followButton.value = t('input.button');
-      langSwitcher.innerText = t('lang');
-      title.innerText = t('mainHead');
-      errorContainer.innerText = error ? t(`errors.${error}`) : '';
-      if (feedsHeader) feedsHeader.innerText = t('output.feedsHeader');
-      if (postsHeader) postsHeader.innerText = t('output.postsHeader');
+  urlInput.setAttribute('placeholder', i18next.t('input.placeholder'));
+  followButton.value = i18next.t('input.button');
+  langSwitcher.innerText = i18next.t('lang');
+  title.innerText = i18next.t('mainHead');
+  errorContainer.innerText = error ? i18next.t(`errors.${error}`) : '';
+  if (feedsHeader) feedsHeader.innerText = i18next.t('output.feedsHeader');
+  if (postsHeader) postsHeader.innerText = i18next.t('output.postsHeader');
 
-      const links = document.querySelectorAll('.read-more');
-      if (links.length !== 0) {
-        links.forEach((link) => {
-          // eslint-disable-next-line no-param-reassign
-          link.innerText = t('output.readMore');
-        });
-      }
+  const links = document.querySelectorAll('.read-more');
+  if (links.length !== 0) {
+    links.forEach((link) => {
+      // eslint-disable-next-line no-param-reassign
+      link.innerText = i18next.t('output.readMore');
     });
+  }
 };

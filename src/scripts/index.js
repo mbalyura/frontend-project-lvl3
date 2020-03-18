@@ -1,13 +1,17 @@
 import { string } from 'yup';
 import axios from 'axios';
 import _ from 'lodash';
+
+import i18next from 'i18next';
+import resources from './locales';
+
 import parseToDom from './parser';
 import buildFeed from './feedBuilder/feedBuilder';
 import runWatchers from './watchers';
 
 const app = () => {
   const state = {
-    language: '',
+    language: 'en',
     status: 'initial', // loading/loaded/failed
     inputValidity: true,
     feeds: {},
@@ -16,9 +20,8 @@ const app = () => {
     error: null, // invalid/double/network
   };
 
-  runWatchers(state);
-
-  state.language = 'en';
+  i18next.init({ lng: state.language, debug: false, resources })
+    .then(() => runWatchers(state));
 
   const rssForm = document.querySelector('.rss-form');
   const urlInput = document.querySelector('.url-input');
@@ -27,12 +30,15 @@ const app = () => {
   // const corsUrl = 'https://cors-anywhere.herokuapp.com/';
   const corsUrl = 'http://localhost:8080/';
 
-  const urlValidate = (url) => string().url().isValid(url);
+  const isUrlValid = (url) => string().url().isValid(url);
 
   const isUrlDouble = (url) => state.feedUrls.includes(url);
 
   const getParsedFeed = (feedUrl) => axios.get(`${corsUrl}${feedUrl}`)
-    .then(({ data }) => parseToDom(data))
+    .then((response) => {
+      console.log(response);
+      return parseToDom(response.data)
+    })
     .then((domData) => buildFeed(domData));
 
   const clearNewPostsBuffer = () => {
@@ -63,7 +69,7 @@ const app = () => {
     state.error = null;
     const { value } = e.target;
     if (isUrlDouble(value)) state.error = 'double';
-    urlValidate(value).then((validity) => {
+    isUrlValid(value).then((validity) => {
       if (!validity) state.error = 'invalid';
       state.inputValidity = validity && !isUrlDouble(value);
     });
