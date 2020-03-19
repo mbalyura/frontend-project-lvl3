@@ -1,25 +1,26 @@
 import hash from 'short-hash';
-import Feed from './Feed';
-import Post from './Post';
 
-export default (xmlData) => {
-  const domData = new DOMParser().parseFromString(xmlData, 'text/xml');
+export default (data) => {
+  const domData = new DOMParser().parseFromString(data, 'text/xml');
 
   const feedTitle = domData.querySelector('title').textContent;
   const feedDescription = domData.querySelector('description').textContent;
   const feedId = hash(feedTitle);
 
-  const feed = new Feed(feedTitle, feedDescription, feedId);
-
   const postItems = domData.querySelectorAll('item');
-  postItems.forEach((postItem) => {
+  const posts = [...postItems].map((postItem) => {
     const title = postItem.querySelector('title').textContent;
     const link = postItem.querySelector('link').textContent;
     const description = postItem.querySelector('description')
       ? postItem.querySelector('description').textContent : '';
-    const currentPost = new Post(title, link, description, feedId);
-    feed.addPost(currentPost);
+    const post = {
+      title, description, link, id: feedId,
+    };
+    return post;
   });
 
+  const feed = {
+    title: feedTitle, description: feedDescription, id: feedId, posts,
+  };
   return feed;
 };

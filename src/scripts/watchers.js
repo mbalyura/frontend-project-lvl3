@@ -8,15 +8,15 @@ import renderNewPosts from './renders/news-render';
 import renderError from './renders/error-render';
 
 export default (state) => {
-  renderLanguage(state);
+  renderLanguage(state.form);
 
   watch(state, 'language', () => {
     i18next.changeLanguage(state.language)
-      .then(renderLanguage(state));
+      .then(renderLanguage(state.form));
   });
 
-  watch(state, ['inputValidity', 'status'], () => {
-    renderInput(state);
+  watch(state.form, ['validity', 'status'], () => {
+    renderInput(state.form);
   });
 
   watch(state, 'feedUrls', () => {
@@ -29,7 +29,7 @@ export default (state) => {
     }
   });
 
-  watch(state, 'error', () => {
-    renderError(state);
+  watch(state.form, 'error', () => {
+    renderError(state.form);
   });
 };

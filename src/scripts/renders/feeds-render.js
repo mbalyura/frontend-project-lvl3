@@ -31,7 +31,7 @@ export default ({ feeds }) => {
     feedDescription.innerText = feed.description;
     feedsContainer.append(feedHead, feedDescription);
 
-    feed.getPosts().forEach((post) => {
+    feed.posts.forEach((post) => {
       const postHead = document.createElement('h6');
       const postDescription = document.createElement('small');
       const link = document.createElement('a');
