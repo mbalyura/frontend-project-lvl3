@@ -17,7 +17,7 @@ export default (posts) => {
     link.innerText = i18next.t('output.readMore');
     link.classList.add('read-more');
     link.href = post.link;
-    postContainer.prepend(postHead, postDescription, link);
+    postContainer.append(postHead, postDescription, link);
   });
   postsContainer.prepend(postsHeader);
 };

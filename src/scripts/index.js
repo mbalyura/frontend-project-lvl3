@@ -32,13 +32,20 @@ const updateInputValidity = (state) => {
     });
 };
 
+const generateIdForFeed = (parsedFeed) => {
+  const id = hash(parsedFeed.feedTitle);
+  const posts = parsedFeed.posts.map((post) => ({ ...post, id }));
+  return { ...parsedFeed, id, posts };
+};
+
 const updateStateWithNewFeed = (state, parsedFeed, feedUrl) => {
   state.feedUrls.push(feedUrl);
-  const { feedTitle, feedDescription, posts } = parsedFeed;
-  const id = hash(feedTitle);
+  const {
+    feedTitle, feedDescription, id, posts,
+  } = parsedFeed;
   const feed = { feedTitle, feedDescription, id };
   state.feeds.push(feed);
-  posts.forEach((post) => state.posts.push({ ...post, id }));
+  state.posts = [...posts, ...state.posts];
 };
 
 
@@ -73,7 +80,8 @@ const app = () => {
     clearNewPostsBuffer();
     Promise.all(state.feedUrls.map(getParsedFeed))
       .then((parsedFeeds) => {
-        const newPosts = parsedFeeds
+        const feeds = parsedFeeds.map(generateIdForFeed);
+        const newPosts = feeds
           .map((newFeed) => _.differenceWith(newFeed.posts, state.posts, _.isEqual))
           .flat().reverse();
         state.newPostsBuffer = newPosts;
@@ -99,7 +107,6 @@ const app = () => {
   });
 
   rssForm.addEventListener('submit', (e) => {
-    console.log('app -> submit');
     e.preventDefault();
     const formData = new FormData(e.target);
     const feedUrl = formData.get('url');
@@ -107,8 +114,8 @@ const app = () => {
       state.status = 'loading';
       getParsedFeed(feedUrl)
         .then((parsedFeed) => {
-          updateStateWithNewFeed(state, parsedFeed, feedUrl);
-          console.log('app -> state', state);
+          const feed = generateIdForFeed(parsedFeed);
+          updateStateWithNewFeed(state, feed, feedUrl);
           state.form.status = 'loaded';
         })
         .catch((err) => {
