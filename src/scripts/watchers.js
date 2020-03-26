@@ -8,7 +8,6 @@ import renderPosts from './renders/posts-render';
 import renderError from './renders/error-render';
 
 export default (state) => {
-  renderLanguage(state.form);
 
   watch(state, 'language', () => {
     i18next.changeLanguage(state.language)

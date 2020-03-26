@@ -1,4 +1,4 @@
-import { string } from 'yup';
+import * as yup from 'yup'
 import axios from 'axios';
 import _ from 'lodash';
 import i18next from 'i18next';
@@ -7,6 +7,7 @@ import hash from 'short-hash';
 import resources from './locales';
 import parseRss from './parser';
 import runWatchers from './watchers';
+import renderLanguage from './renders/lang-render';
 
 // const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
 const corsProxyUrl = 'http://localhost:8080/';
@@ -14,18 +15,15 @@ const corsProxyUrl = 'http://localhost:8080/';
 const getParsedFeed = (feedUrl) => axios.get(`${corsProxyUrl}${feedUrl}`)
   .then(({ data }) => parseRss(data));
 
+  
 const validateInput = (state) => {
-  const isUrlDouble = state.feedUrls.includes(state.form.value);
-  const error = string().url().isValid(state.form.value).then((validity) => {
-    if (!validity) return 'invalid';
-    if (isUrlDouble) return 'double';
-    return null;
-  });
-  return error;
+  const isUrlUniq = (value) => !state.feedUrls.includes(value);
+  return yup.string().url().test('double', isUrlUniq).validate(state.form.value)
 };
 
 const updateInputValidity = (state) => {
-  validateInput(state).then((error) => {
+  validateInput(state).catch((error) => {
+    console.log("!", error.type)
     state.form.error = error;
     state.form.validity = !error;
   });
@@ -57,7 +55,10 @@ const app = () => {
   };
 
   i18next.init({ lng: state.language, debug: false, resources })
-    .then(() => runWatchers(state));
+    .then(() => {
+      runWatchers(state);
+      renderLanguage(state.form);
+    });
 
   const clearNewPostsBuffer = () => {
     console.log('clear buff');
