@@ -5,14 +5,14 @@ export default ({ validity, status }) => {
   const followButton = document.querySelector('.follow-button');
 
   if (status === 'loading') {
-    followButton.classList.add('disabled');
     followButton.value = i18next.t('input.loading');
+    followButton.disabled = true;
   } else if (!validity) {
     urlInput.classList.add('is-invalid');
-    followButton.classList.add('disabled');
+    followButton.disabled = true;
   } else {
     followButton.value = i18next.t('input.button');
     urlInput.classList.remove('is-invalid');
-    followButton.classList.remove('disabled');
+    followButton.disabled = false;
   }
 };

@@ -1,4 +1,4 @@
-import * as yup from 'yup'
+import { string } from 'yup';
 import axios from 'axios';
 import _ from 'lodash';
 import i18next from 'i18next';
@@ -15,18 +15,21 @@ const corsProxyUrl = 'http://localhost:8080/';
 const getParsedFeed = (feedUrl) => axios.get(`${corsProxyUrl}${feedUrl}`)
   .then(({ data }) => parseRss(data));
 
-  
-const validateInput = (state) => {
-  const isUrlUniq = (value) => !state.feedUrls.includes(value);
-  return yup.string().url().test('double', isUrlUniq).validate(state.form.value)
-};
+const validateInput = (state) => string()
+  .url().test('double', (value) => !state.feedUrls.includes(value))
+  .validate(state.form.value);
 
 const updateInputValidity = (state) => {
-  validateInput(state).catch((error) => {
-    console.log("!", error.type)
-    state.form.error = error;
-    state.form.validity = !error;
-  });
+  validateInput(state)
+    .then(() => {
+      state.form.error = null;
+    })
+    .catch(({ type }) => {
+      state.form.error = type;
+    })
+    .finally(() => {
+      state.form.validity = !state.form.error;
+    });
 };
 
 const updateStateWithNewFeed = (state, parsedFeed, feedUrl) => {
@@ -46,7 +49,7 @@ const app = () => {
       value: '',
       validity: true,
       status: 'initial', // loading/loaded/failed
-      error: null, // invalid/double/network
+      error: null, // url/double/network
     },
     feeds: [],
     posts: [],
@@ -96,6 +99,7 @@ const app = () => {
   });
 
   rssForm.addEventListener('submit', (e) => {
+    console.log('app -> submit');
     e.preventDefault();
     const formData = new FormData(e.target);
     const feedUrl = formData.get('url');

@@ -13,7 +13,7 @@ export default {
       readMore: ' Read more >>>',
     },
     errors: {
-      invalid: 'Input adress is invalid',
+      url: 'Input adress is invalid',
       double: 'You already subscribed on this feed',
       network: 'Network error or wrong adress. Chek and try again',
     },
