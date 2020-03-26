@@ -2,12 +2,14 @@ import { string } from 'yup';
 import axios from 'axios';
 import _ from 'lodash';
 import i18next from 'i18next';
+import hash from 'short-hash';
+
 import resources from './locales';
 import parseRss from './parser';
 import runWatchers from './watchers';
 
-const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
-// const corsProxyUrl = 'http://localhost:8080/';
+// const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
+const corsProxyUrl = 'http://localhost:8080/';
 
 const getParsedFeed = (feedUrl) => axios.get(`${corsProxyUrl}${feedUrl}`)
   .then(({ data }) => parseRss(data));
@@ -29,6 +31,16 @@ const updateInputValidity = (state) => {
   });
 };
 
+const updateStateWithNewFeed = (state, parsedFeed, feedUrl) => {
+  state.feedUrls.push(feedUrl);
+  const { feedTitle, feedDescription, posts } = parsedFeed;
+  const id = hash(feedTitle);
+  const feed = { feedTitle, feedDescription, id };
+  state.feeds.push(feed);
+  posts.forEach((post) => state.posts.push({ ...post, id }));
+};
+
+
 const app = () => {
   const state = {
     language: 'en',
@@ -38,7 +50,8 @@ const app = () => {
       status: 'initial', // loading/loaded/failed
       error: null, // invalid/double/network
     },
-    feeds: {},
+    feeds: [],
+    posts: [],
     feedUrls: [],
     newPostsBuffer: [],
   };
@@ -47,10 +60,8 @@ const app = () => {
     .then(() => runWatchers(state));
 
   const clearNewPostsBuffer = () => {
-    state.newPostsBuffer.forEach((post) => {
-      const targetFeed = state.feeds[post.id];
-      targetFeed.posts.push(post);
-    });
+    console.log('clear buff');
+    state.posts = [...state.posts, ...state.newPostsBuffer];
     state.newPostsBuffer = [];
   };
 
@@ -58,14 +69,15 @@ const app = () => {
     clearNewPostsBuffer();
     Promise.all(state.feedUrls.map(getParsedFeed))
       .then((parsedFeeds) => {
-        const newPosts = parsedFeeds.map((newFeed) => {
-          const oldFeed = state.feeds[newFeed.id];
-          return _.differenceWith(newFeed.posts, oldFeed.posts, _.isEqual);
-        }).flat().reverse();
+        const newPosts = parsedFeeds
+          .map((newFeed) => _.differenceWith(newFeed.posts, state.posts, _.isEqual))
+          .flat().reverse();
         state.newPostsBuffer = newPosts;
       });
     setTimeout(getNewPostsInLoop, 10000);
   };
+
+  getNewPostsInLoop();
 
   const langSwitcher = document.querySelector('.language-button');
   const urlInput = document.querySelector('.url-input');
@@ -86,15 +98,12 @@ const app = () => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const feedUrl = formData.get('url');
-    if (state.form.validity && feedUrl !== '') {
-      if (state.form.status === 'initial') {
-        setTimeout(getNewPostsInLoop, 10000);
-      }
+    if (feedUrl !== '') {
       state.status = 'loading';
       getParsedFeed(feedUrl)
         .then((parsedFeed) => {
-          state.feeds[parsedFeed.id] = parsedFeed;
-          state.feedUrls.push(feedUrl);
+          updateStateWithNewFeed(state, parsedFeed, feedUrl);
+          console.log('app -> state', state);
           state.form.status = 'loaded';
         })
         .catch((err) => {

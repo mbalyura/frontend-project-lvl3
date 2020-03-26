@@ -4,7 +4,7 @@ import i18next from 'i18next';
 import renderLanguage from './renders/lang-render';
 import renderInput from './renders/input-render';
 import renderFeeds from './renders/feeds-render';
-import renderNewPosts from './renders/news-render';
+import renderPosts from './renders/posts-render';
 import renderError from './renders/error-render';
 
 export default (state) => {
@@ -20,12 +20,13 @@ export default (state) => {
   });
 
   watch(state, 'feedUrls', () => {
-    renderFeeds(state);
+    renderFeeds(state.feeds);
+    renderPosts(state.posts);
   });
 
   watch(state, 'newPostsBuffer', () => {
     if (state.newPostsBuffer.length !== 0) {
-      renderNewPosts(state);
+      renderPosts(state.newPostsBuffer);
     }
   });
 

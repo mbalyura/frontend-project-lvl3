@@ -1,10 +1,11 @@
 import i18next from 'i18next';
 
-export default ({ newPostsBuffer }) => {
+export default (posts) => {
+  console.log('posts render');
   const postsContainer = document.querySelector('.posts-container');
   const postsHeader = document.querySelector('.posts-header');
 
-  newPostsBuffer.forEach((post) => {
+  posts.forEach((post) => {
     const postContainer = document.getElementById(post.id);
     const postHead = document.createElement('h6');
     const postDescription = document.createElement('small');

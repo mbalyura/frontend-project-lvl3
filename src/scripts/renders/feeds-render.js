@@ -1,11 +1,11 @@
 import i18next from 'i18next';
 
-export default ({ feeds }) => {
+export default (feeds) => {
   const outputContainer = document.querySelector('.output');
-  const urlInput = document.querySelector('.url-input');
+  // const urlInput = document.querySelector('.url-input');
 
   outputContainer.innerHTML = '';
-  urlInput.value = ''; // clear input
+  // urlInput.value = ''; // clear input
 
   const feedsHeader = document.createElement('h4');
   feedsHeader.classList.add('feeds-header', 'border-bottom');
@@ -14,7 +14,7 @@ export default ({ feeds }) => {
   postsHeader.classList.add('posts-header', 'border-bottom');
   postsHeader.innerText = i18next.t('output.postsHeader');
 
-  Object.values(feeds).forEach((feed) => {
+  feeds.forEach((feed) => {
     const row = document.createElement('div');
     row.classList.add('row');
     const feedsContainer = document.createElement('div');
@@ -24,25 +24,12 @@ export default ({ feeds }) => {
     postsContainer.classList.add('posts-container', 'col-md-9');
     postsContainer.setAttribute('id', feed.id);
 
-    const feedHead = document.createElement('h5');
+    const feedTitle = document.createElement('h5');
     const feedDescription = document.createElement('p');
-    feedHead.classList.add('mt-2');
-    feedHead.innerText = feed.title;
-    feedDescription.innerText = feed.description;
-    feedsContainer.append(feedHead, feedDescription);
-
-    feed.posts.forEach((post) => {
-      const postHead = document.createElement('h6');
-      const postDescription = document.createElement('small');
-      const link = document.createElement('a');
-      link.classList.add('read-more');
-      postHead.innerText = post.title;
-      postHead.classList.add('mt-2', 'mb-0');
-      postDescription.innerText = post.description;
-      link.innerText = i18next.t('output.readMore');
-      link.href = post.link;
-      postsContainer.append(postHead, postDescription, link);
-    });
+    feedTitle.classList.add('mt-2');
+    feedTitle.innerText = feed.feedTitle;
+    feedDescription.innerText = feed.feedDescription;
+    feedsContainer.append(feedTitle, feedDescription);
 
     feedsContainer.prepend(feedsHeader);
     postsContainer.prepend(postsHeader);
