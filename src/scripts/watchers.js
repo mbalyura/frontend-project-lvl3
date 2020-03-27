@@ -17,15 +17,13 @@ export default (state) => {
     renderInput(state.form);
   });
 
-  watch(state, 'feedUrls', () => {
+  watch(state, 'feeds', () => {
     renderFeeds(state.feeds);
     renderPosts(state.posts);
   });
 
   watch(state, 'newPostsBuffer', () => {
-    if (state.newPostsBuffer.length !== 0) {
-      renderPosts(state.newPostsBuffer);
-    }
+    renderPosts(state.newPostsBuffer);
   });
 
   watch(state.form, 'error', () => {

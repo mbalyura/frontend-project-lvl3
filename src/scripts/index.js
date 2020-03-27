@@ -16,7 +16,8 @@ const getParsedFeed = (feedUrl) => axios.get(`${corsProxyUrl}${feedUrl}`)
   .then(({ data }) => parseRss(data));
 
 const validateInput = (state) => string()
-  .url().test('double', (value) => !state.feedUrls.includes(value))
+  .url()
+  .test('double', (url) => !state.feedUrls.includes(url))
   .validate(state.form.value);
 
 const updateInputValidity = (state) => {
@@ -38,16 +39,28 @@ const generateIdForFeed = (parsedFeed) => {
   return { ...parsedFeed, id, posts };
 };
 
-const updateStateWithNewFeed = (state, parsedFeed, feedUrl) => {
+const updateStateWithNewFeed = (state, feedWithId, feedUrl) => {
   state.feedUrls.push(feedUrl);
   const {
     feedTitle, feedDescription, id, posts,
-  } = parsedFeed;
+  } = feedWithId;
   const feed = { feedTitle, feedDescription, id };
   state.feeds.push(feed);
-  state.posts = [...posts, ...state.posts];
+  state.posts = [...posts.reverse(), ...state.posts];
 };
 
+const getNewPostsInLoop = (state) => {
+  Promise.all(state.feedUrls.map(getParsedFeed))
+    .then((parsedFeeds) => {
+      const feeds = parsedFeeds.map(generateIdForFeed);
+      const newPosts = feeds
+        .map((newFeed) => _.differenceWith(newFeed.posts, state.posts, _.isEqual))
+        .flat().reverse();
+      state.newPostsBuffer = newPosts;
+      state.posts = [...state.posts, ...newPosts];
+    });
+  setTimeout(() => getNewPostsInLoop(state), 10000);
+};
 
 const app = () => {
   const state = {
@@ -55,12 +68,12 @@ const app = () => {
     form: {
       value: '',
       validity: true,
-      status: 'initial', // loading/loaded/failed
+      status: 'filling', // loading
       error: null, // url/double/network
     },
+    feedUrls: [],
     feeds: [],
     posts: [],
-    feedUrls: [],
     newPostsBuffer: [],
   };
 
@@ -68,28 +81,8 @@ const app = () => {
     .then(() => {
       runWatchers(state);
       renderLanguage(state.form);
+      setTimeout(() => getNewPostsInLoop(state), 10000);
     });
-
-  const clearNewPostsBuffer = () => {
-    console.log('clear buff');
-    state.posts = [...state.posts, ...state.newPostsBuffer];
-    state.newPostsBuffer = [];
-  };
-
-  const getNewPostsInLoop = () => {
-    clearNewPostsBuffer();
-    Promise.all(state.feedUrls.map(getParsedFeed))
-      .then((parsedFeeds) => {
-        const feeds = parsedFeeds.map(generateIdForFeed);
-        const newPosts = feeds
-          .map((newFeed) => _.differenceWith(newFeed.posts, state.posts, _.isEqual))
-          .flat().reverse();
-        state.newPostsBuffer = newPosts;
-      });
-    setTimeout(getNewPostsInLoop, 10000);
-  };
-
-  getNewPostsInLoop();
 
   const langSwitcher = document.querySelector('.language-button');
   const urlInput = document.querySelector('.url-input');
@@ -111,17 +104,18 @@ const app = () => {
     const formData = new FormData(e.target);
     const feedUrl = formData.get('url');
     if (feedUrl !== '') {
-      state.status = 'loading';
+      state.form.status = 'loading';
       getParsedFeed(feedUrl)
         .then((parsedFeed) => {
-          const feed = generateIdForFeed(parsedFeed);
-          updateStateWithNewFeed(state, feed, feedUrl);
-          state.form.status = 'loaded';
+          const feedWithId = generateIdForFeed(parsedFeed);
+          updateStateWithNewFeed(state, feedWithId, feedUrl);
         })
         .catch((err) => {
           console.error(err);
-          state.form.status = 'failed';
           state.form.error = 'network';
+        })
+        .finally(() => {
+          state.form.status = 'filling';
         });
     }
   });

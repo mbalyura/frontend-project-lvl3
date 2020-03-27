@@ -20,7 +20,6 @@ export default ({ error }) => {
   const links = document.querySelectorAll('.read-more');
   if (links.length !== 0) {
     links.forEach((link) => {
-      // eslint-disable-next-line no-param-reassign
       link.innerText = i18next.t('output.readMore');
     });
   }

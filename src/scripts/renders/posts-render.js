@@ -1,7 +1,6 @@
 import i18next from 'i18next';
 
 export default (posts) => {
-  console.log('posts render');
   const postsContainer = document.querySelector('.posts-container');
   const postsHeader = document.querySelector('.posts-header');
 
@@ -17,7 +16,7 @@ export default (posts) => {
     link.innerText = i18next.t('output.readMore');
     link.classList.add('read-more');
     link.href = post.link;
-    postContainer.append(postHead, postDescription, link);
+    postContainer.prepend(postHead, postDescription, link);
   });
   postsContainer.prepend(postsHeader);
 };
