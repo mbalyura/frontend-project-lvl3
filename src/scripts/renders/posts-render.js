@@ -1,8 +1,10 @@
 import i18next from 'i18next';
 
 export default (posts) => {
-  const postsContainer = document.querySelector('.posts-container');
-  const postsHeader = document.querySelector('.posts-header');
+  const postsContainers = document.querySelectorAll('.posts-container');
+  postsContainers.forEach((postsContainer) => {
+    postsContainer.innerHTML = '';
+  });
 
   posts.forEach((post) => {
     const postContainer = document.getElementById(post.id);
@@ -16,7 +18,12 @@ export default (posts) => {
     link.innerText = i18next.t('output.readMore');
     link.classList.add('read-more');
     link.href = post.link;
-    postContainer.prepend(postHead, postDescription, link);
+    postContainer.append(postHead, postDescription, link);
   });
+
+  const postsContainer = document.querySelector('.posts-container');
+  const postsHeader = document.createElement('h4');
+  postsHeader.classList.add('posts-header', 'border-bottom');
+  postsHeader.innerText = i18next.t('output.postsHeader');
   postsContainer.prepend(postsHeader);
 };

@@ -2,10 +2,9 @@ import { watch } from 'melanke-watchjs';
 import i18next from 'i18next';
 
 import renderLanguage from './renders/lang-render';
-import renderInput from './renders/input-render';
+import renderForm from './renders/form-render';
 import renderFeeds from './renders/feeds-render';
 import renderPosts from './renders/posts-render';
-import renderError from './renders/error-render';
 
 export default (state) => {
   watch(state, 'language', () => {
@@ -13,20 +12,15 @@ export default (state) => {
       .then(renderLanguage(state.form));
   });
 
-  watch(state.form, ['validity', 'status'], () => {
-    renderInput(state.form);
+  watch(state.form, ['validity', 'status', 'error'], () => {
+    renderForm(state.form);
   });
 
   watch(state, 'feeds', () => {
     renderFeeds(state.feeds);
+  });
+
+  watch(state, 'posts', () => {
     renderPosts(state.posts);
-  });
-
-  watch(state, 'newPostsBuffer', () => {
-    renderPosts(state.newPostsBuffer);
-  });
-
-  watch(state.form, 'error', () => {
-    renderError(state.form);
   });
 };

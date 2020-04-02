@@ -2,17 +2,14 @@ import i18next from 'i18next';
 
 export default (feeds) => {
   const outputContainer = document.querySelector('.output');
-  // const urlInput = document.querySelector('.url-input');
+  const urlInput = document.querySelector('.url-input');
 
   outputContainer.innerHTML = '';
-  // urlInput.value = ''; // clear input
+  urlInput.value = ''; // clear input
 
   const feedsHeader = document.createElement('h4');
   feedsHeader.classList.add('feeds-header', 'border-bottom');
   feedsHeader.innerText = i18next.t('output.feedsHeader');
-  const postsHeader = document.createElement('h4');
-  postsHeader.classList.add('posts-header', 'border-bottom');
-  postsHeader.innerText = i18next.t('output.postsHeader');
 
   feeds.forEach((feed) => {
     const row = document.createElement('div');
@@ -32,7 +29,6 @@ export default (feeds) => {
     feedsContainer.append(feedTitle, feedDescription);
 
     feedsContainer.prepend(feedsHeader);
-    postsContainer.prepend(postsHeader);
     row.append(feedsContainer, postsContainer);
     outputContainer.prepend(row);
     outputContainer.classList.remove('invisible');

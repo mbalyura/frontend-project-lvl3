@@ -10,7 +10,7 @@
     "dev": "npx webpack-dev-server --open",
     "stats": "npx webpack --json > stats.json && webpack-bundle-analyzer stats.json",
     "deploy": "surge dist rss-aggregator.surge.sh",
-    "cors":	"node cors/cors.js"
+    "cors": "node cors/cors.js"
   },
   "repository": {
     "type": "git",
