@@ -17,9 +17,9 @@ const getParsedFeed = (feedUrl) => axios.get(`${corsProxyUrl}${feedUrl}`)
 
 const getFeedUrls = (state) => state.feeds.map((feed) => feed.feedUrl);
 
-const validateInput = (url, existingUrls) => string()
-  .url()
-  .test('double', () => !existingUrls.includes(url))
+const validateInput = (url, addedFeedUrls) => string()
+  .url('url')
+  .notOneOf(addedFeedUrls, 'double')
   .validate(url);
 
 const updateInputValidity = (state) => {
@@ -28,8 +28,8 @@ const updateInputValidity = (state) => {
       state.form.error = null;
       state.form.validity = true;
     })
-    .catch(({ type }) => {
-      state.form.error = type;
+    .catch(({ message }) => {
+      state.form.error = message;
       state.form.validity = false;
     });
 };
