@@ -1,6 +1,7 @@
 import { string } from 'yup';
 import axios from 'axios';
-import _ from 'lodash';
+import differenceWith from 'lodash/differenceWith';
+import isEqual from 'lodash/isEqual';
 import i18next from 'i18next';
 import hash from 'short-hash';
 
@@ -15,7 +16,7 @@ const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
 const getParsedFeed = (feedUrl) => axios.get(`${corsProxyUrl}${feedUrl}`)
   .then(({ data }) => parseRss(data));
 
-const getFeedUrls = (state) => state.feeds.map((feed) => feed.feedUrl);
+const getFeedUrls = (feeds) => feeds.map((feed) => feed.feedUrl);
 
 const validateInput = (url, addedFeedUrls) => string()
   .url('url')
@@ -23,7 +24,7 @@ const validateInput = (url, addedFeedUrls) => string()
   .validate(url);
 
 const updateInputValidity = (state) => {
-  validateInput(state.form.value, getFeedUrls(state))
+  validateInput(state.form.value, getFeedUrls(state.feeds))
     .then(() => {
       state.form.error = null;
       state.form.validity = true;
@@ -52,11 +53,11 @@ const updateStateWithNewFeed = (state, feedWithId, feedUrl) => {
 };
 
 const getNewPostsInLoop = (state) => {
-  Promise.all(getFeedUrls(state).map(getParsedFeed))
+  Promise.all(getFeedUrls(state.feeds).map(getParsedFeed))
     .then((parsedFeeds) => {
       const feeds = parsedFeeds.map(generateIdForFeed);
       const newPosts = feeds
-        .map((newFeed) => _.differenceWith(newFeed.posts, state.posts, _.isEqual))
+        .map((newFeed) => differenceWith(newFeed.posts, state.posts, isEqual))
         .flat();
       if (newPosts.length === 0) return;
       state.posts = [...newPosts, ...state.posts];
