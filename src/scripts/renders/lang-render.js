@@ -10,7 +10,7 @@ export default ({ error }) => {
   const postsHeader = document.querySelector('.posts-header');
 
   urlInput.setAttribute('placeholder', i18next.t('input.placeholder'));
-  followButton.value = i18next.t('input.button');
+  followButton.innerText = i18next.t('input.button');
   langSwitcher.innerText = i18next.t('lang');
   title.innerText = i18next.t('mainHead');
   errorContainer.innerText = error ? i18next.t(`errors.${error}`) : '';
